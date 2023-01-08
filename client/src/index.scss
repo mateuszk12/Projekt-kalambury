@@ -52,14 +52,23 @@ $background-color_8: #8cd9d9;
 			width: 100%;
 			padding: 1px;
 			justify-content: flex-end;
-			  overflow-y:scroll;
+			overflow-y:scroll;
 			scrollbar-width: none;
+			.Message {
+				display: flex;
+				background-color: $background-color_7;
+				flex-direction: column;
+				align-items: flex-end;
+				width: fit-content;
+				max-width: 40%;
+				padding: 5px;
+				border-radius: 5px;
+				margin: 5px;
+				word-break: break-all;
+			}
 			ul {
 				list-style-type: none;
 				padding: 0;
-				div {
-					overflow-wrap: break-word;
-				}
 			}
 			li {
 				display: flex;
@@ -107,16 +116,7 @@ $background-color_8: #8cd9d9;
 		height: 100%;
 		border: 0;
 	}
-	.Message {
-		display: flex;
-		background-color: $background-color_7;
-		flex-direction: column;
-		align-items: flex-end;
-		width: fit-content;
-		padding: 5px;
-		border-radius: 5px;
-		margin: 5px;
-	}
+	
 	.First {
 		background-color: #03A696;
 		height: 100vh;

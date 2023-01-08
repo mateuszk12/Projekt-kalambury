@@ -15,8 +15,6 @@ export default function Canvas(){
         context.strokeStyle = "black"
         context.linewidth = 50
         contextRef.current = context
-        console.log(isDrawing)
-        // console.log(pos)
     },[])
     useEffect(()=>{
         window.onresize = function(){
