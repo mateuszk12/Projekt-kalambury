@@ -1,6 +1,7 @@
 import React from "react";
 import Message from "./Message";
 import {useState} from "react"
+import Button from "react-bootstrap/Button"
 
 export default function(){
     const [messages,setMessages] = useState([])
@@ -19,13 +20,13 @@ export default function(){
         }
         
     }
-    const styleMess = () =>{
-        if (message.user === "ja"){
-            return {"justify-content": "flex-end"}
-        } else{
-            return {"justify-content": "flex-start"}
-        }
-    }
+    // const styleMess = () =>{
+    //     if (message.user === "ja"){
+    //         return {"justify-content": "flex-end"}
+    //     } else{
+    //         return {"justify-content": "flex-start"}
+    //     }
+    // }
     
     return(
         <div className="Chat">
@@ -41,7 +42,7 @@ export default function(){
             <div className="ChatFormDiv">
             <form onSubmit={handleSubmit} className="ChatForm">
                 <input className="inputChat" type="text" value={message.message} onChange={handleMessage}/>
-                <button className=" btnChat" type="submit"><i className="bi bi-send"></i></button>
+                <button className="btnChat" type="submit"><i className="bi bi-send"></i></button>
             </form>
             </div>
             

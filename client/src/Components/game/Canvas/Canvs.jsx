@@ -3,9 +3,11 @@ import { useRef,useEffect,useState } from 'react'
 export default function Canvas(){
     const canvasRef = useRef(null)
     const contextRef = useRef(null)
-    const [pos,setPos] = useState({x:0,y:0})
+    const [pos,setPos] = useState("")
     const myref = React.createRef();
     const [isDrawing,setIsDrawing] = useState(false)
+    // const [wss,setWss] = useState(null)
+
     useEffect(()=>{
         const canvas = canvasRef.current
         canvas.width = myref.current.getBoundingClientRect().width;
@@ -15,24 +17,40 @@ export default function Canvas(){
         context.strokeStyle = "black"
         context.linewidth = 50
         contextRef.current = context
+        // const webS = new WebSocket('wss://canvas')
+        // webS.onmessage((e)=>{
+        //    drawImage(canvas)
+        // })
+        // setWss(webS)
     },[])
-    useEffect(()=>{
-        window.onresize = function(){
-            const canvas = canvasRef.current
-            canvas.width = myref.current.getBoundingClientRect().width ;
-            canvas.height = myref.current.getBoundingClientRect().height;
-        }
-    })
-    const image = () => {
-        const canvas = canvasRef.current
-        console.log("działa")
-            // const d = canvas.toDataURL("image/png")
-            // const w = window.open('about:blank', 'image from canvas');
-            // w.document.write("<img src='"+d+"' alt='from canvas'/>");
+    const drawImage = (canvas,ctx) => {
+        let img = new Image()
+        img.src = `${pos}`
+        let hRatio = canvas.width/img.width;
+        let vRatio = canvas.height/img.height;
+        let Ratio = Math.min(hRatio,vRatio);
+        let centerShift_x = (canvas.width-img.width*Ratio)/2;
+        let centerShift_y = (canvas.height-img.height*Ratio)/2;
+        ctx.clearRect(0,0,canvas.width,canvas.height)
+        ctx.drawImage(img,0,0,img.width,img.height,centerShift_x,centerShift_y,img.width*Ratio, img.height*Ratio)
     }
     useEffect(()=>{
+        //zrobic inaczej 
+        window.onresize = function(){
+            const canvas = canvasRef.current
+            const ctx = canvas.getContext("2d")
+            canvas.width = myref.current.getBoundingClientRect().width ;
+            canvas.height = myref.current.getBoundingClientRect().height;
+            drawImage(canvas,ctx)
+        }
+    })
+    
+    useEffect(()=>{
         if(!isDrawing){
-            image()
+            const canvas = canvasRef.current
+            const image = canvas.toDataURL("image/png")
+            setPos(image)
+            // wss.send(image)
         }
     },[isDrawing])
     const drawStart = ({nativeEvent}) => {
