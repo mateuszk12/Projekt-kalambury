@@ -1,13 +1,13 @@
 import React from 'react'
 import { useRef,useEffect,useState } from 'react'
+import io from "socket.io-client"
 export default function Canvas(){
     const canvasRef = useRef(null)
     const contextRef = useRef(null)
     const [pos,setPos] = useState("")
     const myref = React.createRef();
     const [isDrawing,setIsDrawing] = useState(false)
-    // const [wss,setWss] = useState(null)
-
+    const socket = useRef(null)
     useEffect(()=>{
         const canvas = canvasRef.current
         canvas.width = myref.current.getBoundingClientRect().width;
@@ -17,23 +17,31 @@ export default function Canvas(){
         context.strokeStyle = "black"
         context.linewidth = 50
         contextRef.current = context
-        // const webS = new WebSocket('wss://canvas')
-        // webS.onmessage((e)=>{
-        //    drawImage(canvas)
-        // })
-        // setWss(webS)
+        socket.current = (io('http://localhost:3001'))
     },[])
-    const drawImage = (canvas,ctx) => {
+    const drawimage = (canvas,ctx,image) => {
         let img = new Image()
-        img.src = `${pos}`
-        let hRatio = canvas.width/img.width;
-        let vRatio = canvas.height/img.height;
-        let Ratio = Math.min(hRatio,vRatio);
-        let centerShift_x = (canvas.width-img.width*Ratio)/2;
-        let centerShift_y = (canvas.height-img.height*Ratio)/2;
-        ctx.clearRect(0,0,canvas.width,canvas.height)
-        ctx.drawImage(img,0,0,img.width,img.height,centerShift_x,centerShift_y,img.width*Ratio, img.height*Ratio)
+        img.onload=start
+        img.src = `${image}`
+        function start(){
+            let hRatio = canvas.width/img.width;
+            let vRatio = canvas.height/img.height;
+            let Ratio = Math.min(hRatio,vRatio);
+            let centerShift_x = (canvas.width-img.width*Ratio)/2;
+            let centerShift_y = (canvas.height-img.height*Ratio)/2;
+            // ctx.clearRect(0,0,canvas.width,canvas.height)
+            ctx.drawImage(img,0,0,img.width,img.height,centerShift_x,centerShift_y,img.width*Ratio, img.height*Ratio)
+        }
     }
+    useEffect(()=>{
+
+        socket.current.on("receive_message",(data)=>{
+            const canvas = canvasRef.current
+            const ctx = canvas.getContext("2d")
+            console.log(data.test)
+            drawimage(canvas,ctx,data.message)
+          })
+    },[socket])
     useEffect(()=>{
         //zrobic inaczej 
         window.onresize = function(){
@@ -41,7 +49,7 @@ export default function Canvas(){
             const ctx = canvas.getContext("2d")
             canvas.width = myref.current.getBoundingClientRect().width ;
             canvas.height = myref.current.getBoundingClientRect().height;
-            drawImage(canvas,ctx)
+            drawimage(canvas,ctx,pos)
         }
     })
     
@@ -49,8 +57,8 @@ export default function Canvas(){
         if(!isDrawing){
             const canvas = canvasRef.current
             const image = canvas.toDataURL("image/png")
-            setPos(image)
-            // wss.send(image)
+            socket.current.emit("message",{message:image,test:'przyszlo'})
+            console.log("rysuje")
         }
     },[isDrawing])
     const drawStart = ({nativeEvent}) => {
@@ -70,8 +78,6 @@ export default function Canvas(){
     const draw = ({nativeEvent}) =>{
         if (isDrawing){
             const {offsetX,offsetY} = nativeEvent;
-            setPos({x:offsetX,y:offsetY})
-            // console.log(myref.current.getBoundingClientRect().width,myref.current.getBoundingClientRect().height)
         contextRef.current.lineTo(offsetX,offsetY)
         contextRef.current.stroke()
         } else {
@@ -80,6 +86,11 @@ export default function Canvas(){
         }
         
     }
+
+    const drawDot = ({nativeEvent}) => {
+        const {offsetX,offsetY} = nativeEvent
+        contextRef.current.fillRect(offsetX,offsetY,1,1)   
+    }
     return(
         <div className='Canvas' ref={myref}>
             <canvas 
@@ -87,6 +98,7 @@ export default function Canvas(){
             onMouseUp={drawFinish}
             onMouseMove={draw}
             onMouseLeave={drawFinish}
+            onClick={drawDot}
             ref={canvasRef}
             />
             
