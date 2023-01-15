@@ -47,7 +47,7 @@ export default function Login(){
                 />
                 
                 {props.errors.password && props.touched.password?(<div>{props.errors.password}</div>):null}
-                <Link to="kalambury">
+                <Link to="/kalambury">
                 <Button className="loginBtn" size="lg" type={"submit"}>Login</Button>
                 </Link>
                 

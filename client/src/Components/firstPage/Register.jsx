@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import * as Yup from 'yup'
 
 export default function Register(props){
+    const [reg,setReg] = useState()
     const RegisterSchema = Yup.object().shape({
             username: Yup.string()
             .min(3,"min 3 characters expected")
@@ -27,7 +28,18 @@ export default function Register(props){
                 }}
                 validationSchema={RegisterSchema}
                 onSubmit={(values,{resetForm}) => {
-
+                    console.log(values)
+                    fetch('http://localhost:3001/', {
+                        method: 'POST', 
+                        body: JSON.stringify(values),
+                        })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            console.log('Success:', data);
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
                     resetForm()
                 }}            
             >

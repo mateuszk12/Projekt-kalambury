@@ -18,29 +18,29 @@ export default function Canvas(){
         context.linewidth = 50
         contextRef.current = context
         socket.current = (io('http://localhost:3001'))
+        socket.current.emit("joinRoom",{gameId:"orangutan"})
     },[])
     const drawimage = (canvas,ctx,image) => {
         let img = new Image()
         img.onload=start
         img.src = `${image}`
         function start(){
-            let hRatio = canvas.width/img.width;
-            let vRatio = canvas.height/img.height;
-            let Ratio = Math.min(hRatio,vRatio);
-            let centerShift_x = (canvas.width-img.width*Ratio)/2;
-            let centerShift_y = (canvas.height-img.height*Ratio)/2;
-            // ctx.clearRect(0,0,canvas.width,canvas.height)
-            ctx.drawImage(img,0,0,img.width,img.height,centerShift_x,centerShift_y,img.width*Ratio, img.height*Ratio)
+            let heightR = canvas.width/img.width;
+            let widthR = canvas.height/img.height;
+            let Ratio = Math.min(heightR,widthR);
+            let centerX = (canvas.width-img.width*Ratio)/2;
+            let centerY = (canvas.height-img.height*Ratio)/2;
+            ctx.clearRect(0,0,canvas.width,canvas.height)
+            ctx.drawImage(img,0,0,img.width,img.height,centerX,centerY,img.width*Ratio, img.height*Ratio)
         }
     }
     useEffect(()=>{
-
-        socket.current.on("receive_message",(data)=>{
+        socket.current.on("receiveImageGame",(image)=>{
             const canvas = canvasRef.current
             const ctx = canvas.getContext("2d")
-            console.log(data.test)
-            drawimage(canvas,ctx,data.message)
+            drawimage(canvas,ctx,image)
           })
+        
     },[socket])
     useEffect(()=>{
         //zrobic inaczej 
@@ -57,8 +57,7 @@ export default function Canvas(){
         if(!isDrawing){
             const canvas = canvasRef.current
             const image = canvas.toDataURL("image/png")
-            socket.current.emit("message",{message:image,test:'przyszlo'})
-            console.log("rysuje")
+            socket.current.emit("imageGame",{image:image,gameId:"orangutan"})
         }
     },[isDrawing])
     const drawStart = ({nativeEvent}) => {
@@ -74,7 +73,6 @@ export default function Canvas(){
         setIsDrawing(false)
         
     }
-
     const draw = ({nativeEvent}) =>{
         if (isDrawing){
             const {offsetX,offsetY} = nativeEvent;
@@ -101,7 +99,6 @@ export default function Canvas(){
             onClick={drawDot}
             ref={canvasRef}
             />
-            
         </div>
     )
 }
