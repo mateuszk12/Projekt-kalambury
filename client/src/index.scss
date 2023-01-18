@@ -88,6 +88,27 @@ $background-color_8: #8cd9d9;
 				padding: 0;
 				margin: 0;
 				box-sizing: border-box;
+				display: flex;
+				.btnChat {
+					box-sizing: border-box;
+					background-color: $background-color_5;
+					border: 0;
+					width: 10%;
+					height: 100%;
+					justify-self: flex-end;
+					// overflow: hidden;
+					&:hover {
+						background-color: $background-color_6;
+					}
+					&:active {
+						box-shadow: inset -2px -2px 3px rgba(255, 255, 255, 0.6), inset 2px 2px 3px rgba(0, 0, 0, 0.6);
+					}
+				}
+				.inputChat {
+					box-sizing: border-box;
+					width: 90%;
+					height: 100%;
+				}
 			}
 		}
 	}
@@ -96,26 +117,7 @@ $background-color_8: #8cd9d9;
 		background-color: $background-color_4;
 		height: 40%;
 	}
-	.btnChat {
-		box-sizing: border-box;
-		background-color: $background-color_5;
-		border: 0;
-		width: 10%;
-		height: 100%;
-		justify-self: flex-end;
-		// overflow: hidden;
-		&:hover {
-			background-color: $background-color_6;
-		}
-		&:active {
-			box-shadow: inset -2px -2px 3px rgba(255, 255, 255, 0.6), inset 2px 2px 3px rgba(0, 0, 0, 0.6);
-		}
-	}
-	.inputChat {
-		width: 90%;
-		height: 100%;
-		border: 0;
-	}
+	
 	
 	.First {
 		background-color: #03A696;

@@ -12,7 +12,6 @@ export default function LoginPage(){
     // }
     const handleClosing= () => {
         setBtn(false)
-        console.log(btnClicked)
     }
     return (
         <div className="First">

@@ -2,6 +2,7 @@ import React from "react";
 import {Formik,Field,Form} from "formik"
 import { useEffect,useState,UseRef } from "react";
 import Button from 'react-bootstrap/Button';
+import axios from "axios"
 import * as Yup from 'yup'
 
 export default function Register(props){
@@ -27,19 +28,21 @@ export default function Register(props){
                     password: '',
                 }}
                 validationSchema={RegisterSchema}
-                onSubmit={(values,{resetForm}) => {
-                    console.log(values)
-                    fetch('http://localhost:3001/', {
-                        method: 'POST', 
-                        body: JSON.stringify(values),
-                        })
-                        .then((response) => response.json())
-                        .then((data) => {
-                            console.log('Success:', data);
-                        })
-                        .catch((error) => {
-                            console.error('Error:', error);
-                        });
+                onSubmit={async (values,{resetForm}) => {
+                    const json = JSON.stringify(values)
+                    try{
+                        const res = await axios.post('http://localhost:3001/register', 
+                            json,
+                            {
+                                headers: {'Content-Type':'application/json'},
+                                withCredentials:true
+                            }
+                        )
+                        console.log(res.data)
+                    } catch (err){
+                        console.log(err)
+                    }
+                    
                     resetForm()
                 }}            
             >

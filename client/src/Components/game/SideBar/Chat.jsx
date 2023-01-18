@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button"
 export default function(){
     const socket = useRef(null)
     useEffect(()=>{
-        socket.current = (io('http://localhost:3001'))
+        socket.current = (io('http://localhost:3002'))
         socket.current.emit("joinRoom",{gameId:"orangutan"})
     },[])
     const [messages,setMessages] = useState([])
@@ -54,7 +54,7 @@ export default function(){
             <div className="ChatFormDiv">
             <form onSubmit={handleSubmit} className="ChatForm">
                 <input className="inputChat" type="text" value={message.message} onChange={handleMessage}/>
-                <button className="btnChat" type="submit"><i className="bi bi-send"></i></button>
+                <button className="btnChat" type="submit"><i className="bi bi-send img-fluid"></i></button>
             </form>
             </div>
             

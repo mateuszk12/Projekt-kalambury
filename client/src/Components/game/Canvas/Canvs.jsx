@@ -17,7 +17,7 @@ export default function Canvas(){
         context.strokeStyle = "black"
         context.linewidth = 50
         contextRef.current = context
-        socket.current = (io('http://localhost:3001'))
+        socket.current = (io('http://localhost:3002'))
         socket.current.emit("joinRoom",{gameId:"orangutan"})
     },[])
     const drawimage = (canvas,ctx,image) => {
