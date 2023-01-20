@@ -1,24 +1,28 @@
 import React from "react";
+import axios from "axios"
 import Message from "./Message";
 import {useState,useEffect,useRef} from "react"
 import io from "socket.io-client"
 import Button from "react-bootstrap/Button"
 
 export default function(){
+    const [messages,setMessages] = useState([])
+    const [message,setMessage] = useState({user:"",message:""})
     const socket = useRef(null)
     useEffect(()=>{
         socket.current = (io('http://localhost:3002'))
-        socket.current.emit("joinRoom",{gameId:"orangutan"})
+        socket.current.emit("joinRoom",{gameId:"aydYGhOo"})
+        axios.get("http://localhost:3001/game",{params:{gameId:"aydYGhOo"}})
+            .then((res) => res.data.forEach((val) => setMessages(prev => [...prev,{user:val.username,message:val.message}])))
     },[])
-    const [messages,setMessages] = useState([])
-    const [message,setMessage] = useState({user:"",message:""})
+   
     const handleMessage  = (e) => {
         setMessage({"message":e.target.value,user:"ja"})
     }
     const handleSubmit  = (e) => {
         if (message.message !== ""){
             e.preventDefault()
-            socket.current.emit("chat",{gameId:"orangutan",message:message.message})
+            socket.current.emit("chat",{gameId:"aydYGhOo",message:message.message,username:"tajemniczyktos"})
             setMessages(prev => [...prev,message])
             setMessage({user:"",message:""})
             
@@ -39,6 +43,7 @@ export default function(){
             console.log("działa czat")
             setMessages((prev) => [...prev,{user:"obcy",message:data}])
         })
+        
     },[socket])
     return(
         <div className="Chat">

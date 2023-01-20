@@ -6,7 +6,7 @@ import axios from "axios"
 import * as Yup from 'yup'
 
 export default function Register(props){
-    const [reg,setReg] = useState()
+    const [res,setRes] = useState("")
     const RegisterSchema = Yup.object().shape({
             username: Yup.string()
             .min(3,"min 3 characters expected")
@@ -38,9 +38,10 @@ export default function Register(props){
                                 withCredentials:true
                             }
                         )
-                        console.log(res.data)
                     } catch (err){
-                        console.log(err)
+                        if (err.response.status === 409){
+                            setRes("konto o podanej nazwie użytkownika istnieje")
+                        }
                     }
                     
                     resetForm()
@@ -72,8 +73,12 @@ export default function Register(props){
                 />
                 {props.errors.password && props.touched.password?(<div>{props.errors.password}</div>):null}
                 <Button className="registerBtn" size="lg" type={"submit"}>Register</Button>
+                
             </Form>)}
             </Formik>
+            <div>
+                {res}
+            </div>
         </div>
     )
 }

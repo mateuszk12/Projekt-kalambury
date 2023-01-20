@@ -10,13 +10,16 @@ const userSchema = new Schema({
         type:String,
         required:true
     },
-    // roles:{
-    //     User:{
-    //         type:Number,
-    //         default: 1
-    //     },
-    //     // Admin:Boolean
-    // }
+    roles:{
+        User:{
+            type:Number,
+            default: 1
+        },
+        Admin:{
+            type:Number,
+            default: 0
+        }
+    }
 },{timestamps:true});
 
 

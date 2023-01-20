@@ -18,7 +18,7 @@ export default function Canvas(){
         context.linewidth = 50
         contextRef.current = context
         socket.current = (io('http://localhost:3002'))
-        socket.current.emit("joinRoom",{gameId:"orangutan"})
+        socket.current.emit("joinRoom",{gameId:"aydYGhOo"})
     },[])
     const drawimage = (canvas,ctx,image) => {
         let img = new Image()
@@ -57,7 +57,7 @@ export default function Canvas(){
         if(!isDrawing){
             const canvas = canvasRef.current
             const image = canvas.toDataURL("image/png")
-            socket.current.emit("imageGame",{image:image,gameId:"orangutan"})
+            socket.current.emit("imageGame",{image:image,gameId:"aydYGhOo"})
         }
     },[isDrawing])
     const drawStart = ({nativeEvent}) => {

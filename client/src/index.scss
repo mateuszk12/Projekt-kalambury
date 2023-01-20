@@ -132,9 +132,18 @@ $background-color_8: #8cd9d9;
 				background-color: $background-color_8;
 				padding: 2vw;
 				border-radius: 5px;
-				width: fit-content;
+				box-sizing: border-box;
+				width:30vw;
 				height: fit-content;
-				
+				.LoginForm{
+					padding-top: 5%;
+					padding-bottom: 5%;
+					margin-bottom: 5%;
+					border-bottom: solid 1px black;
+					.loginBtn{
+						width: 100%;
+					}
+				}
 			}
 			.Best{
 				background-color: $background-color_8;
@@ -151,22 +160,13 @@ $background-color_8: #8cd9d9;
 					overflow-y:scroll;
 				}
 			}
-			.Login{
-				padding-bottom: 5%;
-				margin-bottom: 5%;
-				border-bottom: solid 1px black;
-				width: 20vw;
-				.loginBtn{
-					margin-top: 1rem;
-					width: 100%;
-				}
-			}
 			.registerBtn{
 				width: 100%;
 			}
 			.Register{
 				display: flex;
 				flex-direction: column;
+				
 				.registerBtn{
 					width: 100%;
 					margin-top: 1rem;
@@ -182,7 +182,7 @@ $background-color_8: #8cd9d9;
 	.Choosing{
 		height: 100vh;
 		display: flex;
-		justify-content: space-between;
+		justify-content:space-around;
 		align-items: center;
 		.JoinG{
 			height: fit-content;

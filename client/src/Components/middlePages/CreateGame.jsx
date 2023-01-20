@@ -19,6 +19,9 @@ export default function CreateGame(){
                             </Button>
                         </Link>                
                 </div>
+                <div className="form-group">
+                    tutaj pojawia się nazwa pokoju
+                </div>
             </form>
         </Card>
     )
