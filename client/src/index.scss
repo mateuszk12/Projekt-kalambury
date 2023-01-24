@@ -9,11 +9,16 @@ $background-color_7: antiquewhite;
 $background-color_8: #8cd9d9;
 .App{
 	background-color: $background-color_1;
-	.Main {
-		display: flex;
-		flex-direction: column;
-		height: 100vh;
-		width:100vw
+	display: flex;
+	justify-content: center;
+	.navbar{
+		align-items: center;
+		width: 70vw;
+		border-radius:0px 0px 15px 15px ;
+		box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.75);
+		height: 7vh;
+		box-sizing: border-box;
+		position:absolute;
 	}
 	.Game {
 		display: flex;
@@ -22,108 +27,120 @@ $background-color_8: #8cd9d9;
 		height: 100vh;
 		background-color: $background-color_1;
 		padding: 1%;
-		
-	}
-	.Canvas {
-		box-sizing: border-box;
-		width: 70%;
-		height: 100%;
-		background-color: $background-color_2;
-		margin-right: 1%;
-		
-	}
-	.SideBar {
-		display: flex;
-		flex-direction: column;
-		box-sizing: border-box;
-		width: 30%;
-		height: 100%;
-	}
-	.Chat {
-		display: flex;
-		flex-direction: column;
-		box-sizing: border-box;
-		background-color: $background-color_3;
-		height: 60%;
-		margin-bottom: 3%;
-		.messages {
-			display: flex;
-			height: 93%;
-			width: 100%;
+		.Canvas {
+			box-sizing: border-box;
+			width: 70%;
+			height: 100%;
+			background-color: $background-color_2;
+			margin-right: 1%;
+			border-radius: 15px;
 			padding: 1px;
-			justify-content: flex-end;
-			overflow-y:scroll;
-			scrollbar-width: none;
-			.Message {
-				display: flex;
-				background-color: $background-color_7;
-				flex-direction: column;
-				align-items: flex-end;
-				width: fit-content;
-				padding: 5px;
-				border-radius: 5px;
-				margin: 5px;
-				flex-wrap: wrap;
-			}
-			ul {
-				list-style-type: none;
-				padding: 0;
-			}
-			li {
-				display: flex;
-				justify-content: flex-end;
+		}
+		.SideBar {
+			display: flex;
+			flex-direction: column;
+			box-sizing: border-box;
+			width: 30%;
+			height: 100%;
+			.Ranking {
+				box-sizing: border-box;
+				background-color: $background-color_4;
+				height: 40%;
+				border-radius: 15px;
+				border: 0;
+				padding: 1rem;
 			}
 		}
-		.ChatFormDiv {
-			box-sizing: border-box;
-			align-self: flex-end;
+		.Chat {
 			display: flex;
-			width: 100%;
-			height: 7%;
-			padding: 0;
-			margin: 0;
-			.ChatForm {
+			flex-direction: column;
+			box-sizing: border-box;
+			background-color: $background-color_3;
+			height: 60%;
+			margin-bottom: 3%;
+			border-radius: 15px;
+			.messages {
+				display: flex;
+				height: 93%;
 				width: 100%;
-				height: 100%;
+				padding: 1px;
+				justify-content: flex-end;
+				overflow-y:scroll;
+				scrollbar-width: none;
+				.Message {
+					display: flex;
+					background-color: $background-color_7;
+					flex-direction: column;
+					align-items: flex-end;
+					width: fit-content;
+					padding: 5px;
+					border-radius: 5px;
+					margin: 5px;
+					flex-wrap: wrap;
+				}
+				ul {
+					list-style-type: none;
+					padding: 0;
+				}
+				li {
+					display: flex;
+					justify-content: flex-end;
+				}
+			}
+			.ChatFormDiv {
+				box-sizing: border-box;
+				align-self: flex-end;
+				display: flex;
+				width: 100%;
+				height: 7%;
 				padding: 0;
 				margin: 0;
-				box-sizing: border-box;
-				display: flex;
-				.btnChat {
-					box-sizing: border-box;
-					background-color: $background-color_5;
-					border: 0;
-					width: 10%;
+				.ChatForm {
+					width: 100%;
 					height: 100%;
-					justify-self: flex-end;
-					// overflow: hidden;
-					&:hover {
-						background-color: $background-color_6;
-					}
-					&:active {
-						box-shadow: inset -2px -2px 3px rgba(255, 255, 255, 0.6), inset 2px 2px 3px rgba(0, 0, 0, 0.6);
-					}
-				}
-				.inputChat {
+					padding: 0;
+					margin: 0;
 					box-sizing: border-box;
-					width: 90%;
-					height: 100%;
+					display: flex;
+					.btnChat {
+						box-sizing: border-box;
+						background-color: $background-color_5;
+						border: 0;
+						width: 10%;
+						height: 100%;
+						justify-self: flex-end;
+						border-radius: 0px 0px 15px 0px;
+						// overflow: hidden;
+						&:hover {
+							background-color: $background-color_6;
+						}
+						&:active {
+							box-shadow: inset -2px -2px 3px rgba(255, 255, 255, 0.6), inset 2px 2px 3px rgba(0, 0, 0, 0.6);
+						}
+					}
+					.inputChat {
+						box-sizing: border-box;
+						width: 90%;
+						height: 100%;
+						border-radius: 0px 0px 0px 15px;
+					}
 				}
 			}
 		}
 	}
-	.Ranking {
-		box-sizing: border-box;
-		background-color: $background-color_4;
-		height: 40%;
-	}
+	
+	
 	
 	
 	.First {
-		background-color: #03A696;
-		height: 100vh;
+		background-color: $background-color_5;
+		height: 92vh;
+		width:70vw;
+		margin-top: 8vh;
+		border-radius: 15px 15px 0px 0px;
 		display:flex;
 		align-items: center;
+		box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.75);
 		.container{
 			display: flex;
 			justify-content: center;
@@ -133,7 +150,9 @@ $background-color_8: #8cd9d9;
 				padding: 2vw;
 				border-radius: 5px;
 				box-sizing: border-box;
-				width:30vw;
+				width:25vw;
+				max-height: 90vh;
+				min-height: 50vh;
 				height: fit-content;
 				.LoginForm{
 					padding-top: 5%;
@@ -165,8 +184,7 @@ $background-color_8: #8cd9d9;
 			}
 			.Register{
 				display: flex;
-				flex-direction: column;
-				
+				flex-direction: column;				
 				.registerBtn{
 					width: 100%;
 					margin-top: 1rem;
@@ -180,15 +198,30 @@ $background-color_8: #8cd9d9;
 		
 	}
 	.Choosing{
-		height: 100vh;
-		display: flex;
-		justify-content:space-around;
+		@extend .First;
+		justify-content:space-between;
 		align-items: center;
-		.JoinG{
-			height: fit-content;
-			width:fit-content;
+		box-sizing: border-box;
+		padding: 1rem;
+		.col{
+			height: 100%;
+		.ic{
+			width: 100%;
 			padding: 1rem;
+			margin-bottom: 1rem;
+			border-radius: 15px;
+			.btn{
+				margin-top: 1rem;
+			}
 		}
+			.UserPanel{
+				height: 100%;
+				width: 100%;
+				background-color: aliceblue;
+				border-radius: 15px;
+			}
+		}
+		
 	}
 }
 
@@ -199,8 +232,4 @@ body {
 html {
 	margin: 0;
 	padding: 0;
-}
-.navbar{
-	width: 100%;
-	position:absolute;
 }

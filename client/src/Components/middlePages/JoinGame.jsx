@@ -1,29 +1,46 @@
-import React from "react";
+import {useState} from "react";
 import Card from "react-bootstrap/Card"
-import { Link } from "react-router-dom"
+import { Link,useNavigate } from "react-router-dom"
+import axios from "axios"
 import Button from "react-bootstrap/Button";
-import {useState} from "react"
+import { useSelector,useDispatch } from "react-redux";
+import { addCode } from "../../appState/features/game";
 export default function JoinGame(){
-    const [gameId,setGameId] = useState('')
+    const [err,setErr] = useState('')
+    const [gameCode,setGameCode] = useState('')
+    const code = useSelector((state) => state.game.code)
+    const username = useSelector((state) => state.auth.username)
+    const token = useSelector((state)=>state.auth.token)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const handleInput = (e) =>{
-        setGameId(e.target.value)
+        setGameCode(e.target.value)
     }
     const onSubmit = (e) => {
+        dispatch(addCode(gameCode))       
+        const config = {headers:`Authorization: Bearer ${token}`,params:{gameId:code,username:username}}
+        axios.get("http://localhost:3001/game/join",config)
+            .then((res)=>{
+                console.log(res)
+                navigate("/kalambury/game")
+            })
+            .catch((error) => {
+                alert(error.data)
+            })
         e.preventDefault()
     }   
     return(
-        <Card className="JoinG">
+        <Card className="ic">
             <form onSubmit={onSubmit}>
                 <div className="form-group">
                     <label>Game Code</label>
-                    <input className="form-control" placeholder="enter game code" onChange={handleInput} value={gameId} />
-                        <Link to="game" className="d-grid gap-2">
-                            <Button variant="primary" size="lg">
-                                Join
-                            </Button>
-                        </Link>                
+                    <input className="form-control" placeholder="enter game code" onChange={handleInput} value={gameCode}  />
+                    <div className="d-grid">
+                        <Button variant="primary" size="lg" type="submit">Join</Button>
+                    </div>         
                 </div>
             </form>
+
         </Card>
     )
 }

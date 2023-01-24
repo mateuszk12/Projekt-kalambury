@@ -3,17 +3,26 @@ import axios from "axios"
 import Message from "./Message";
 import {useState,useEffect,useRef} from "react"
 import io from "socket.io-client"
-import Button from "react-bootstrap/Button"
+
+import { useSelector } from "react-redux";
 
 export default function(){
+    const code = useSelector((state)=>state.game.code)
+    const token = useSelector((state)=>state.auth.token)
+    const username = useSelector((state)=>state.auth.username)
     const [messages,setMessages] = useState([])
     const [message,setMessage] = useState({user:"",message:""})
     const socket = useRef(null)
     useEffect(()=>{
         socket.current = (io('http://localhost:3002'))
-        socket.current.emit("joinRoom",{gameId:"aydYGhOo"})
-        axios.get("http://localhost:3001/game",{params:{gameId:"aydYGhOo"}})
-            .then((res) => res.data.forEach((val) => setMessages(prev => [...prev,{user:val.username,message:val.message}])))
+        socket.current.emit("joinRoom",{gameId:code})
+        const config = {headers:`Authorization: Bearer ${token}`,params:{gameId:code}}
+        axios.get("http://localhost:3001/game/current/chat",config)
+            .then((res) => {
+                if (res.data.length > 0){
+                    res.data.forEach((val) => setMessages(prev => [...prev,{user:val.username,message:val.message}]))
+                }
+            })
     },[])
    
     const handleMessage  = (e) => {
@@ -22,7 +31,7 @@ export default function(){
     const handleSubmit  = (e) => {
         if (message.message !== ""){
             e.preventDefault()
-            socket.current.emit("chat",{gameId:"aydYGhOo",message:message.message,username:"tajemniczyktos"})
+            socket.current.emit("chat",{gameId:code,message:message.message,username:username})
             setMessages(prev => [...prev,message])
             setMessage({user:"",message:""})
             
@@ -31,17 +40,10 @@ export default function(){
         }
         
     }
-    // const styleMess = () =>{
-    //     if (message.user === "ja"){
-    //         return {"justify-content": "flex-end"}
-    //     } else{
-    //         return {"justify-content": "flex-start"}
-    //     }
-    // }
     useEffect(()=>{
         socket.current.on("chatReceived",(data)=>{
             console.log("działa czat")
-            setMessages((prev) => [...prev,{user:"obcy",message:data}])
+            setMessages((prev) => [...prev,{user:data.username,message:data.message}])
         })
         
     },[socket])
@@ -59,7 +61,7 @@ export default function(){
             <div className="ChatFormDiv">
             <form onSubmit={handleSubmit} className="ChatForm">
                 <input className="inputChat" type="text" value={message.message} onChange={handleMessage}/>
-                <button className="btnChat" type="submit"><i className="bi bi-send img-fluid"></i></button>
+                <button className="btnChat" type="submit"><i className="bi bi-send fa-sm"></i></button>
             </form>
             </div>
             

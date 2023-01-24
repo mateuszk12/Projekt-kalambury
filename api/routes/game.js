@@ -1,10 +1,14 @@
 const express = require("express")
-const { handleGameDelete,handleGamePost,handleGamePut,handleGameGet} = require("../controllers/game")
+const { handleGameDelete,handleGamePost,handleGameGet,handleGameCreate,getGameInfo,joinGame} = require("../controllers/game")
 const router = express.Router()
-
 router.route('/')
     .post(handleGamePost)
-    .get(handleGameGet)
-    .put(handleGamePut)
+    .get(getGameInfo)
     .delete(handleGameDelete)
+router.route('/create')
+    .post(handleGameCreate)
+router.route('/join')
+    .get(joinGame)
+router.route("/current/:id")
+    .get(handleGameGet)
 module.exports = router;

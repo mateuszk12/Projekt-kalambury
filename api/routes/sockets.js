@@ -1,7 +1,8 @@
 const express = require("express")
-const {handleRegister} = require("../controllers/register")
+const {handleGamePut} = require("../controllers/sockets")
 const router = express.Router()
 
+
 router.route('/')
-    .post(handleRegister)
+    .put(handleGamePut)
 module.exports = router;

@@ -15,18 +15,18 @@ const io = new Server(server,{
 })
 
 io.on("connection",(socket) => {
-    socket.on("image",(data)=>{
-        socket.broadcast.emit("receive_image",data)
-    })
-    socket.on("joinRoom",({gameId})=>{
-        socket.join(gameId)        
+    socket.on("joinRoom",({gameId,username})=>{
+        socket.join(gameId)
+        socket.to(gameId).emit("chatReceived",{message:`${username} has joined game`,username:"server"})
+        // axios.get()  
     })
     socket.on("imageGame",({gameId,image})=>{
         socket.to(gameId).emit("receiveImageGame",image)
-        // axios.put("http://localhost:3001/game",{gameId:gameId,image:image})
+        // axios.put("http://localhost:3001/sockets",{gameId:gameId,image:image})
+        //     .then((res) => console.log(res.body))
     })
     socket.on("chat",({gameId,message,username})=>{
-        socket.to(gameId).emit("chatReceived",message)
+        socket.to(gameId).emit("chatReceived",{message:message,username:username})
         // axios.put("http://localhost:3001/game",{gameId:gameId,message:message,username:username})
     })
     

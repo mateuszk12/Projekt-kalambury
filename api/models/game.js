@@ -8,6 +8,7 @@ const messageSchema = new Schema({
         type:String
     }
 },{_id:false})
+
 const gameSchema = new Schema({
     gameId:{
         type:String,
@@ -18,6 +19,7 @@ const gameSchema = new Schema({
         default:""
     },
     users:[String],
+    bannedUsers:[String],
     max:{
         type:Number,
         default:5
@@ -28,7 +30,7 @@ const gameSchema = new Schema({
         type:String,
         default:"running"
     },
-    currentUsers:[String]
+    
 },{timestamps:true})
 
 module.exports = mongoose.model("Game",gameSchema)

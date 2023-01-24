@@ -1,7 +1,7 @@
 const express = require('express')
-const loginController = require("../controllers/login")
+const {handleLogin} = require("../controllers/login")
 const router = express.Router()
 
 router.route('/')
-    .post(loginController.handleLogin)
+    .post(handleLogin)
 module.exports = router;

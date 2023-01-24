@@ -1,35 +1,45 @@
 import React from 'react'
-import { useRef,useEffect,useState } from 'react'
+import { useRef,useEffect,useState,createRef } from 'react'
+import { useSelector} from "react-redux";
+import axios from "axios"
 import io from "socket.io-client"
 export default function Canvas(){
+    const code = useSelector((state) => state.game.code)
+    const username = useSelector((state) => state.auth.username)
+    const token = useSelector((state) => state.auth.token)
+    const myref = createRef();
     const canvasRef = useRef(null)
-    const contextRef = useRef(null)
-    const [pos,setPos] = useState("")
-    const myref = React.createRef();
+    const contextRef = useRef(null) 
     const [isDrawing,setIsDrawing] = useState(false)
     const socket = useRef(null)
+    
     useEffect(()=>{
-        const canvas = canvasRef.current
-        canvas.width = myref.current.getBoundingClientRect().width;
-        canvas.height = myref.current.getBoundingClientRect().height;
-        const context = canvas.getContext("2d")
+        canvasRef.current.width = myref.current.getBoundingClientRect().width;
+        canvasRef.current.height = myref.current.getBoundingClientRect().height;
+        const context = canvasRef.current.getContext("2d")
         context.lineCap = "round"
         context.strokeStyle = "black"
         context.linewidth = 50
         contextRef.current = context
+        console.log(context)
         socket.current = (io('http://localhost:3002'))
-        socket.current.emit("joinRoom",{gameId:"aydYGhOo"})
+        socket.current.emit("joinRoom",{gameId:code,username:username})
+        const config = {headers: { Authorization: `Bearer ${token}` },params:{gameId:code}};
+        axios.get("http://localhost:3001/game/current/image",config)
+            .then((res) => 
+                drawimage(canvasRef.current,context,res.data))
+            .catch((err) => console.log(err))
     },[])
     const drawimage = (canvas,ctx,image) => {
         let img = new Image()
         img.onload=start
         img.src = `${image}`
         function start(){
-            let heightR = canvas.width/img.width;
-            let widthR = canvas.height/img.height;
-            let Ratio = Math.min(heightR,widthR);
-            let centerX = (canvas.width-img.width*Ratio)/2;
-            let centerY = (canvas.height-img.height*Ratio)/2;
+            const heightR = canvas.width/img.width;
+            const widthR = canvas.height/img.height;
+            const Ratio = Math.min(heightR,widthR);
+            const centerX = (canvas.width-img.width*Ratio)/2;
+            const centerY = (canvas.height-img.height*Ratio)/2;
             ctx.clearRect(0,0,canvas.width,canvas.height)
             ctx.drawImage(img,0,0,img.width,img.height,centerX,centerY,img.width*Ratio, img.height*Ratio)
         }
@@ -37,27 +47,29 @@ export default function Canvas(){
     useEffect(()=>{
         socket.current.on("receiveImageGame",(image)=>{
             const canvas = canvasRef.current
-            const ctx = canvas.getContext("2d")
+            const ctx = contextRef.current
             drawimage(canvas,ctx,image)
           })
         
     },[socket])
-    useEffect(()=>{
-        //zrobic inaczej 
-        window.onresize = function(){
+    const handleResize = () => {
             const canvas = canvasRef.current
-            const ctx = canvas.getContext("2d")
+            console.log(canvas)
+            const ctx = contextRef.current
             canvas.width = myref.current.getBoundingClientRect().width ;
             canvas.height = myref.current.getBoundingClientRect().height;
-            drawimage(canvas,ctx,pos)
-        }
+            drawimage(canvas,ctx)
+    }
+    useEffect(()=>{
+        window.addEventListener('resize',handleResize)
+        return () => window.removeEventListener("resize",handleResize)
     })
     
     useEffect(()=>{
         if(!isDrawing){
             const canvas = canvasRef.current
             const image = canvas.toDataURL("image/png")
-            socket.current.emit("imageGame",{image:image,gameId:"aydYGhOo"})
+            socket.current.emit("imageGame",{image:image,gameId:code})
         }
     },[isDrawing])
     const drawStart = ({nativeEvent}) => {
@@ -90,6 +102,7 @@ export default function Canvas(){
         contextRef.current.fillRect(offsetX,offsetY,1,1)   
     }
     return(
+        
         <div className='Canvas' ref={myref}>
             <canvas 
             onMouseDown={drawStart}

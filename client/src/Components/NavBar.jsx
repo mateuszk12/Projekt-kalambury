@@ -1,22 +1,24 @@
 import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import { Link } from "react-router-dom"
+import { logout } from '../appState/features/auth';
+import { Link } from "react-router-dom";
+import { useSelector,useDispatch} from "react-redux";
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 
 export default function NavBar() {
+  const username = useSelector((state) => state.auth.username);
+  const path = username ? "/kalambury" : "/";
+  const dispatch = useDispatch()
+  const handleLogOut = () => {
+    dispatch(logout())
+  };
   return (
     <Navbar bg="light" expand="lg">
     <Container>
-      <Link to="/"><Navbar.Brand>Kalabmury</Navbar.Brand></Link>
+      <Link to={path}><Button variant='light'>Kalabmury</Button></Link>
       <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
-          <Navbar.Text>
-            <Link to="login">
-              <Button>Login/Sign Up</Button>
-            </Link>
-          </Navbar.Text>
+              {username ? <Button onClick={handleLogOut}>logout</Button> :<Link to="login"><Button>Login/Sign Up</Button></Link>}
           {/* <NavBar.Text>
             <Link to="admin">
               Admin
