@@ -6,10 +6,10 @@ if (token) {
     const decoded = jwtDecode(token)
     data.username = decoded.username
     data.token = token
-    if (decoded.roles.User == 1){
+    if (decoded.roles.User === 1){
         data.roles.push("user")
     }
-    if (decoded.roles.Admin == 1){
+    if (decoded.roles.Admin === 1){
         data.roles.push("admin")
     }
 }

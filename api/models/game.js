@@ -30,6 +30,9 @@ const gameSchema = new Schema({
         type:String,
         default:"running"
     },
+    currentUser:{
+        type:String
+    }
     
 },{timestamps:true})
 

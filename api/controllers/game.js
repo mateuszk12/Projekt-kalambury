@@ -71,7 +71,7 @@ const handleGameGet = async(req,res) => {
                 res.status(200).send(filteredMessages)
             } 
             if (id === "image"){
-                res.status(200).send(img)
+                res.status(200).send({image:img,username:"testKonto"})
             }
         } else {
             res.sendStatus(400)

@@ -7,6 +7,7 @@ import io from "socket.io-client"
 export default function Canvas(){
     const code = useSelector((state) => state.game.code)
     const username = useSelector((state) => state.auth.username)
+    const [drawUs,setdrawUs] = useState("")
     const token = useSelector((state) => state.auth.token)
     const myref = createRef();
     const canvasRef = useRef(null)
@@ -28,7 +29,8 @@ export default function Canvas(){
         const config = {headers: { "Authorization": `Bearer ${token}`,"Content-Type":"application/json" },params:{gameId:code}};
         axios.get("http://localhost:3001/game/current/image",config)
             .then((res) => {
-                drawimage(canvasRef.current,context,res.data)
+                drawimage(canvasRef.current,context,res.data.image)
+                setdrawUs(res.data.username)
             })
             .catch((err) => console.log(err))
     },[])
@@ -70,14 +72,17 @@ export default function Canvas(){
         if(!isDrawing){
             const canvas = canvasRef.current
             const image = canvas.toDataURL("image/png")
-            socket.current.emit("imageGame",{image:image,gameId:code})
+            socket.current.emit("imageGame",{image:image,gameId:code,username:username})
         }
     },[isDrawing])
     const drawStart = ({nativeEvent}) => {
+    if (username === drawUs){
         const {offsetX,offsetY} = nativeEvent;
         contextRef.current.beginPath()
         contextRef.current.moveTo(offsetX,offsetY)
         setIsDrawing(true)
+    }
+        
 
     }
     

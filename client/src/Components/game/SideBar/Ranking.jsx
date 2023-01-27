@@ -16,7 +16,7 @@ export default function Ranking(){
         <div className="Ranking">
             <div className="con">
                 <h2>nazwa pokoju: {code}</h2>
-                <h2>rysujący: {username} </h2>
+                <h2>uzytkownik: {username} </h2>
                 <h2>pozostało słów: </h2>
             </div>
             

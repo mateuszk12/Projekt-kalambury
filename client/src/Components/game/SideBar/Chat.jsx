@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios"
 import Message from "./Message";
 import {useState,useEffect,useRef} from "react"
+
 import io from "socket.io-client"
 
 import { useSelector } from "react-redux";
@@ -26,7 +27,7 @@ export default function(){
     },[])
    
     const handleMessage  = (e) => {
-        setMessage({"message":e.target.value,user:"ja"})
+        setMessage({"message":e.target.value,user:username})
     }
     const handleSubmit  = (e) => {
         if (message.message !== ""){
@@ -49,6 +50,7 @@ export default function(){
     },[socket])
     return(
         <div className="Chat">
+            
             <div className="messages" >
             <ul>
             {messages.map((value,index)=>

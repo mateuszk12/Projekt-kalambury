@@ -18,21 +18,26 @@ io.on("connection",(socket) => {
         axios.put("http://localhost:3001/sockets",{username:username})
              .then((res) => console.log(res.data))
     })
-    socket.on("imageGame",({gameId,image})=>{
+    socket.on("imageGame",({gameId,image,username})=>{
+        if (username === "testKonto"){
         socket.to(gameId).emit("receiveImageGame",image)
-        axios.put("http://localhost:3001/sockets",{gameId:gameId,image:image})
+            axios.put("http://localhost:3001/sockets",{gameId:gameId,image:image})
              .then((res) => console.log(res.data))
+        }
+        
     })
     socket.on("chat",({gameId,message,username})=>{
+        socket.to(gameId).emit("chatReceived",{message:message,username:username})
         axios.put("http://localhost:3001/sockets",{gameId:gameId,message:message,username:username})
             .then((res) => {
-                console.log(res.data.guess)
-                console.log(gameId)
+                const data = {}
+                console.log(res.data)
                 if (res.data.guess){
-                    socket.to(gameId).emit("chatReceived",{message:`uzytkownik ${res.data.username} zgadl haslo: ${res.data.word}`,username:"server"})
+                    data.message = `uzytkownik ${res.data.username} zgadl haslo: ${res.data.word}`
                 } else {
-                    socket.to(gameId).emit("chatReceived",{message:message,username:username})
+                    data.message = message
                 }
+                socket.to(gameId).emit("chatReceived",{message:data.message,username:username})
             })
     })
     
