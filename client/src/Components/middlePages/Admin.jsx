@@ -29,7 +29,7 @@ export default function Admin(){
             })
     }
     const handleAddWord = () => {
-        const data = {word:word}
+        const data = {word:word.toLocaleLowerCase()}
         axios.post("http://localhost:3001/user",data,config)
             .then((res) => {
                 alert(`dodano ${res.data}`)

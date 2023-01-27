@@ -1,5 +1,5 @@
 import React from 'react'
-import { useRef,useEffect,useState,useLayoutEffect,createRef } from 'react'
+import { useRef,useEffect,useState,createRef } from 'react'
 import { useSelector} from "react-redux";
 import { useLocation } from "react-router-dom"
 import axios from "axios"
@@ -14,9 +14,8 @@ export default function Canvas(){
     const contextRef = useRef(null) 
     const [isDrawing,setIsDrawing] = useState(false)
     const socket = useRef(null)
-    // const [canvas,setCanvas] = useState(null)
     const location = useLocation()
-    useLayoutEffect(()=>{
+    useEffect(()=>{
         canvasRef.current.width = myref.current.getBoundingClientRect().width;
         canvasRef.current.height = myref.current.getBoundingClientRect().height;
         const context = canvasRef.current.getContext("2d")
@@ -33,7 +32,7 @@ export default function Canvas(){
                 setdrawUs(res.data.username)
             })
             .catch((err) => console.log(err))
-    },[])
+    },[location])
     const drawimage = (canvas,ctx,image) => {
         let img = new Image()
         img.onload=start
