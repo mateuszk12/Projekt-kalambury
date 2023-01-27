@@ -1,15 +1,13 @@
 import React from "react";
-import Register from "./Register"
-import Login from "./Login";
 import BestPlayers from "./BestPlayers";
-import Button from "react-bootstrap/Button"
-import { useState } from "react"
+import { useSelector } from "react-redux";
 export default function First(){
+    const lang = useSelector((state) => state.customize.lang)
     return (
         <div className="First">
             
             <div className="container">
-                <h1>Witaj</h1>
+                <h1>{lang ? "Witaj" :"Welcome"}</h1>
                     <div className="Best">
                         <BestPlayers/>
                     </div> 

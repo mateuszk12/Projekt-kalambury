@@ -11,15 +11,19 @@ import LoginPage from "./Components/firstPage/LoginPage";
 function App() {
   const location = useLocation();
   const user = useSelector((state)=>state.auth.username)
+  const roles = useSelector((state)=> state.auth.roles)
+  const role = roles.includes("admin")
+  const page = (user && !role ? <Choosing/> : <First/>)
+    
   return (
-    <div className="App">
+    <div className="App" style={{backgroundColor:"darkGrey"}}>
       {((location.pathname === "/kalambury/game") && user !== null) ? null : <NavBar/>}
       <Routes>
         <Route path="/" element={<First/>}/>
         <Route path="/login" element={<LoginPage/>}/>
         <Route path="/kalambury" element={user ? <Choosing/> : <LoginPage/>}/>
         <Route path="/kalambury/game" element={user ? <Game/> : <LoginPage/>}/>
-        <Route path="/admin" element={<Admin/>}></Route>
+        <Route path="/admin" element={user && role ? <Admin/> : page}></Route>
       </Routes>
     </div>
   );

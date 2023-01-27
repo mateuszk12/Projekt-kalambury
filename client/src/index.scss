@@ -7,25 +7,53 @@ $background-color_5: #0997a7;
 $background-color_6: #087480;
 $background-color_7: antiquewhite;
 $background-color_8: #8cd9d9;
+$color1:#dad7cd;
+$color2:#a3b18a;
+$color3:#588157;
+$color4:#3a5a40;
 .App{
-	background-color: $background-color_1;
+	background-color: $color1;
 	display: flex;
 	justify-content: center;
-	.navbar{
+	.admin{
+		@extend .First;
+		min-width: fit-content;
+		background-color: $color3;
+		display: flex;
 		align-items: center;
-		width: 70vw;
-		border-radius:0px 0px 15px 15px ;
+		.card{
+			display: flex;
+			width: fit-content;
+			height: fit-content;
+			justify-content: center;
+			align-items: center;
+			padding: 1rem;
+			margin: 1rem;
+			.btn{
+				margin-top: 10%;
+				width: 100%;
+			}
+		}
+	}
+	.navbar{
+		background-color: $color2;
+		align-items: center;
 		box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.75);
-		height: 7vh;
+		height: fit-content;
+		width: 100vw;
+		padding: 1rem;
 		box-sizing: border-box;
 		position:absolute;
+		.btn{
+			margin-right:1rem;
+		}
 	}
 	.Game {
 		display: flex;
 		flex-direction: row-reverse;
 		width: 100vw;
 		height: 100vh;
-		background-color: $background-color_1;
+		background-color: $color1;
 		padding: 1%;
 		.Canvas {
 			box-sizing: border-box;
@@ -43,19 +71,37 @@ $background-color_8: #8cd9d9;
 			width: 30%;
 			height: 100%;
 			.Ranking {
+				display: flex;
 				box-sizing: border-box;
-				background-color: $background-color_4;
+				background-color: $color4;
 				height: 40%;
 				border-radius: 15px;
 				border: 0;
 				padding: 1rem;
+				flex-direction: column;
+				.con{
+					width: fit-content;
+					height: fit-content;
+					background-color: $color3;
+					padding: 1rem;
+					border-radius: 15px;
+				}
+				.controls{
+					display: flex;
+
+					align-self: center;
+					justify-self: flex-end;
+					.btn{
+						margin: 1rem;
+					}
+				}
 			}
 		}
 		.Chat {
 			display: flex;
 			flex-direction: column;
 			box-sizing: border-box;
-			background-color: $background-color_3;
+			background-color: $color4;
 			height: 60%;
 			margin-bottom: 3%;
 			border-radius: 15px;
@@ -104,7 +150,7 @@ $background-color_8: #8cd9d9;
 					display: flex;
 					.btnChat {
 						box-sizing: border-box;
-						background-color: $background-color_5;
+						background-color: $color2;
 						border: 0;
 						width: 10%;
 						height: 100%;
@@ -133,28 +179,34 @@ $background-color_8: #8cd9d9;
 	
 	
 	.First {
-		background-color: $background-color_5;
+		background-color: $color4;
 		height: 92vh;
 		width:70vw;
 		margin-top: 8vh;
 		border-radius: 15px 15px 0px 0px;
 		display:flex;
-		align-items: center;
+		justify-content: center;
 		box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.75);
 		.container{
 			display: flex;
 			justify-content: center;
 			gap: 10%;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			min-width: fit-content;
 			.Forms {
-				background-color: $background-color_8;
+				background-color: $color3;
 				padding: 2vw;
 				border-radius: 5px;
 				box-sizing: border-box;
-				width:25vw;
-				max-height: 90vh;
-				min-height: 50vh;
+				width:30vw;
+				max-height: 100%;
+				min-height: fit-content;
+				// min-width: fit-content;
 				height: fit-content;
 				.LoginForm{
+					box-sizing: border-box;
 					padding-top: 5%;
 					padding-bottom: 5%;
 					margin-bottom: 5%;
@@ -163,20 +215,24 @@ $background-color_8: #8cd9d9;
 						width: 100%;
 					}
 				}
+				#register{
+					box-sizing: border-box;
+				}
 			}
 			.Best{
-				background-color: $background-color_8;
-				padding: 2%;
+				background-color: $color3;
+				padding: 1rem;
 				border-radius: 5px;
 				width: 20vw;
 				overflow: hidden;
+			
 			}
 			.BestPlayers{
-				height: 20rem;
 				box-sizing:border-box;
 				.BP{
-					height: 90%;
+					height: 30vh;
 					overflow-y:scroll;
+					
 				}
 			}
 			.registerBtn{
@@ -187,7 +243,6 @@ $background-color_8: #8cd9d9;
 				flex-direction: column;				
 				.registerBtn{
 					width: 100%;
-					margin-top: 1rem;
 				}
 				.btn-close{
 					align-self: flex-end;
@@ -210,6 +265,7 @@ $background-color_8: #8cd9d9;
 			padding: 1rem;
 			margin-bottom: 1rem;
 			border-radius: 15px;
+			background-color: $color3;
 			.btn{
 				margin-top: 1rem;
 			}
@@ -217,7 +273,7 @@ $background-color_8: #8cd9d9;
 			.UserPanel{
 				height: 100%;
 				width: 100%;
-				background-color: aliceblue;
+				background-color: $color3;
 				border-radius: 15px;
 			}
 		}

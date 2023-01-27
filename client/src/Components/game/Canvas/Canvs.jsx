@@ -1,6 +1,7 @@
 import React from 'react'
-import { useRef,useEffect,useState,createRef } from 'react'
+import { useRef,useEffect,useState,useLayoutEffect,createRef } from 'react'
 import { useSelector} from "react-redux";
+import { useLocation } from "react-router-dom"
 import axios from "axios"
 import io from "socket.io-client"
 export default function Canvas(){
@@ -12,8 +13,9 @@ export default function Canvas(){
     const contextRef = useRef(null) 
     const [isDrawing,setIsDrawing] = useState(false)
     const socket = useRef(null)
-    
-    useEffect(()=>{
+    // const [canvas,setCanvas] = useState(null)
+    const location = useLocation()
+    useLayoutEffect(()=>{
         canvasRef.current.width = myref.current.getBoundingClientRect().width;
         canvasRef.current.height = myref.current.getBoundingClientRect().height;
         const context = canvasRef.current.getContext("2d")
@@ -21,13 +23,13 @@ export default function Canvas(){
         context.strokeStyle = "black"
         context.linewidth = 50
         contextRef.current = context
-        console.log(context)
         socket.current = (io('http://localhost:3002'))
         socket.current.emit("joinRoom",{gameId:code,username:username})
-        const config = {headers: { Authorization: `Bearer ${token}` },params:{gameId:code}};
+        const config = {headers: { "Authorization": `Bearer ${token}`,"Content-Type":"application/json" },params:{gameId:code}};
         axios.get("http://localhost:3001/game/current/image",config)
-            .then((res) => 
-                drawimage(canvasRef.current,context,res.data))
+            .then((res) => {
+                drawimage(canvasRef.current,context,res.data)
+            })
             .catch((err) => console.log(err))
     },[])
     const drawimage = (canvas,ctx,image) => {
@@ -54,7 +56,6 @@ export default function Canvas(){
     },[socket])
     const handleResize = () => {
             const canvas = canvasRef.current
-            console.log(canvas)
             const ctx = contextRef.current
             canvas.width = myref.current.getBoundingClientRect().width ;
             canvas.height = myref.current.getBoundingClientRect().height;
@@ -90,10 +91,7 @@ export default function Canvas(){
             const {offsetX,offsetY} = nativeEvent;
         contextRef.current.lineTo(offsetX,offsetY)
         contextRef.current.stroke()
-        } else {
-            
-            
-        }
+        } 
         
     }
 

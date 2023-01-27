@@ -9,20 +9,17 @@ const handleLogin = async (req,res) => {
         if (!username || !password) return res.status(400)
         const user = await User.findOne({username: username});
         const roles = user.roles
+        console.log(roles)
         if (!user) res.status(401).json("invalid password or username")
         const passAuth = await bcrypt.compare(password,user.password)
     if (passAuth){
         const Atoken = jwt.sign(
-            {"username":user.username},
+            {"username":user.username,"roles":roles},
             process.env.ACCESS_TOKEN,
             {expiresIn: "3h"}
         )
-        // const Rtoken = jwt.sign(
-        //     {"username":user.username},
-        //     process.env.REFRESH_TOKEN,
-        //     {"expiresIn": '3h'}
-        // )
-        res.status(200).json({username,Atoken,roles})
+
+        res.status(200).json(Atoken)
     } else {
         res.status(401).json("invalid password or username")
     }

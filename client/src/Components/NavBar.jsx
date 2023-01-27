@@ -1,5 +1,6 @@
 import Container from 'react-bootstrap/Container';
 import { logout } from '../appState/features/auth';
+import { changeLang } from '../appState/features/custom';
 import { Link } from "react-router-dom";
 import { useSelector,useDispatch} from "react-redux";
 import Navbar from 'react-bootstrap/Navbar';
@@ -7,58 +8,27 @@ import Button from 'react-bootstrap/Button';
 
 export default function NavBar() {
   const username = useSelector((state) => state.auth.username);
+  const roles = useSelector((state) => state.auth.roles)
+  const lang = useSelector((state) => state.customize.lang)
+  const role = roles.includes("admin")
   const path = username ? "/kalambury" : "/";
   const dispatch = useDispatch()
   const handleLogOut = () => {
     dispatch(logout())
   };
+  const handleLang = () => {
+    dispatch(changeLang())
+  }
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar expand="lg">
     <Container>
-      <Link to={path}><Button variant='light'>Kalabmury</Button></Link>
-      <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-              {username ? <Button onClick={handleLogOut}>logout</Button> :<Link to="login"><Button>Login/Sign Up</Button></Link>}
-          {/* <NavBar.Text>
-            <Link to="admin">
-              Admin
-            </Link>
-          </NavBar.Text> */}
-        </Navbar.Collapse>
+      <Link to={path}><Button  variant="outline-dark">Kalabmury</Button></Link>
+      <div>
+        {lang ? <Button onClick={handleLang} variant="outline-dark">pl</Button>:<Button onClick={handleLang} variant="outline-dark">en</Button>}
+        {role && username ? <Link to="admin"><Button variant="outline-dark">admin</Button></Link>:""}
+        {username ? <Button variant="dark" onClick={handleLogOut}>logout</Button> :<Link to="login"><Button variant="outline-dark">Login/Sign Up</Button></Link>}
+      </div>
     </Container>
   </Navbar>
   );
 }
-// import Container from 'react-bootstrap/Container';
-// import Nav from 'react-bootstrap/Nav';
-// import Navbar from 'react-bootstrap/Navbar';
-// import NavDropdown from 'react-bootstrap/NavDropdown';
-
-// export default function NavBar() {
-//   return (
-    // <Navbar bg="light" expand="lg">
-    //   <Container>
-    //     <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-    //     <Navbar.Toggle aria-controls="basic-navbar-nav" />
-    //     <Navbar.Collapse id="basic-navbar-nav">
-    //       <Nav className="me-auto">
-    //         <Nav.Link href="#home">Home</Nav.Link>
-    //         <Nav.Link href="#link">Link</Nav.Link>
-    //         <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-    //           <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-    //           <NavDropdown.Item href="#action/3.2">
-    //             Another action
-    //           </NavDropdown.Item>
-    //           <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-    //           <NavDropdown.Divider />
-    //           <NavDropdown.Item href="#action/3.4">
-    //             Separated link
-    //           </NavDropdown.Item>
-    //         </NavDropdown>
-    //       </Nav>
-    //     </Navbar.Collapse>
-    //   </Container>
-    // </Navbar>
-    
-//   );
-// }

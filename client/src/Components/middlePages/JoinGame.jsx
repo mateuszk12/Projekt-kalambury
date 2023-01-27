@@ -1,16 +1,15 @@
 import {useState} from "react";
 import Card from "react-bootstrap/Card"
-import { Link,useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import Button from "react-bootstrap/Button";
 import { useSelector,useDispatch } from "react-redux";
 import { addCode } from "../../appState/features/game";
 export default function JoinGame(){
-    const [err,setErr] = useState('')
     const [gameCode,setGameCode] = useState('')
-    const code = useSelector((state) => state.game.code)
     const username = useSelector((state) => state.auth.username)
     const token = useSelector((state)=>state.auth.token)
+    const lang = useSelector((state) => state.customize.lang)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const handleInput = (e) =>{
@@ -18,10 +17,9 @@ export default function JoinGame(){
     }
     const onSubmit = (e) => {
         dispatch(addCode(gameCode))       
-        const config = {headers:`Authorization: Bearer ${token}`,params:{gameId:code,username:username}}
+        const config = {headers:{'Authorization': `Bearer ${token}`},params:{gameId:gameCode,username:username}}
         axios.get("http://localhost:3001/game/join",config)
             .then((res)=>{
-                console.log(res)
                 navigate("/kalambury/game")
             })
             .catch((error) => {
@@ -33,10 +31,10 @@ export default function JoinGame(){
         <Card className="ic">
             <form onSubmit={onSubmit}>
                 <div className="form-group">
-                    <label>Game Code</label>
+                    <label>{lang?"Kod gry":"Game Code"}</label>
                     <input className="form-control" placeholder="enter game code" onChange={handleInput} value={gameCode}  />
                     <div className="d-grid">
-                        <Button variant="primary" size="lg" type="submit">Join</Button>
+                        <Button variant="dark" size="lg" type="submit">{lang?"Dołącz":"Join"}</Button>
                     </div>         
                 </div>
             </form>

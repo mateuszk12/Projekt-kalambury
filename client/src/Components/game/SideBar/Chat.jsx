@@ -42,7 +42,7 @@ export default function(){
     }
     useEffect(()=>{
         socket.current.on("chatReceived",(data)=>{
-            console.log("działa czat")
+            console.log(data)
             setMessages((prev) => [...prev,{user:data.username,message:data.message}])
         })
         

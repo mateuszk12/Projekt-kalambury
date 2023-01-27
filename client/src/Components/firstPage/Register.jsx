@@ -1,12 +1,14 @@
 import React from "react";
 import {Formik,Field,Form} from "formik"
-import { useEffect,useState,UseRef } from "react";
+import {useState} from "react";
+import { useSelector } from "react-redux";
 import Button from 'react-bootstrap/Button';
 import axios from "axios"
 import * as Yup from 'yup'
 
 export default function Register(props){
     const [res,setRes] = useState("")
+    const lang = useSelector((state) => state.customize.lang)
     const RegisterSchema = Yup.object().shape({
             username: Yup.string()
             .min(3,"min 3 characters expected")
@@ -15,7 +17,7 @@ export default function Register(props){
             password: Yup.string()
             .max(30,"30 character max")
             .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-            "Must Contain at least 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character")
+            lang ? "Musi zawierać co najmniej 8 znaków, jedną dużą, jedna małą,jedną cyfrę i jeden znak specjalny" :"Must Contain at least 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character")
             .required('Password required')
         });
     return(
@@ -26,6 +28,7 @@ export default function Register(props){
                 initialValues={{
                     username: '',
                     password: '',
+                    role:'',
                 }}
                 validationSchema={RegisterSchema}
                 onSubmit={async (values,{resetForm}) => {
@@ -48,7 +51,7 @@ export default function Register(props){
                 }}            
             >
             {props =>( <Form className = {"RegisterForm"}>
-                <label className="form-label">Username</label>
+                <label className="form-label">{lang? "Nazwa uzytkownika":"Username"}</label>
                 <Field
                     className="form-control"
                     type="text"
@@ -60,7 +63,7 @@ export default function Register(props){
                     values={props.values.username}
                 />
                 {props.errors.username && props.touched.username?(<div>{props.errors.username}</div>):null}
-                <label className="form-label">Password</label>
+                <label className="form-label">{lang? "Hasło":"Password"}</label>
                 <Field
                     className="form-control"
                     type="password"
@@ -72,8 +75,7 @@ export default function Register(props){
                     values={props.values.password}
                 />
                 {props.errors.password && props.touched.password?(<div>{props.errors.password}</div>):null}
-                <Button className="registerBtn" size="lg" type={"submit"}>Register</Button>
-                
+                <Button className="registerBtn" size="lg" variant="dark" type={"submit"}>{lang? "Zarejestruj":"Register"}</Button>
             </Form>)}
             </Formik>
             <div>

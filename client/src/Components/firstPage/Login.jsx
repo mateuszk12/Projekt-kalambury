@@ -1,13 +1,14 @@
 import React from "react";
 import {Formik,Form,Field} from "formik"
 import { useNavigate } from "react-router-dom"
-import { useSelector,useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import {login} from "../../appState/features/auth"
+import jwtDecode from "jwt-decode";
 import axios from "axios";
 import Button from 'react-bootstrap/Button';
 
 export default function Login(){
-    const username = useSelector((state) => state.auth.username)
+    const lang = useSelector((state) => state.customize.lang)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     return(
@@ -26,13 +27,21 @@ export default function Login(){
                     }
                     )
                         .then((res) => {
-                            dispatch(login({username:res.data.username,token:res.data.Atoken}))
+                            sessionStorage.setItem("token",res.data)
+                            const decoded = jwtDecode(res.data)
+                            const roles = []
+                            if (decoded.roles.user === 1){
+                                roles.push("user")
+                            }
+                            if (decoded.roles.admin === 1){
+                                roles.push("admin")
+                            }
+                            dispatch(login({username:decoded.username,token:res.data,roles:roles}))
                             navigate("/kalambury")
                             
                         })
                         .catch((err) => {
                             navigate("/")
-                            console.log(err)
                         })
                     
                     // resetForm()
@@ -40,7 +49,7 @@ export default function Login(){
             >
             {props =>( <Form className = {"LoginForm"}>
                 <div className="mb-3">
-                <label className="form-label">Username</label>
+                <label className="form-label">{lang ? "Nazwa użytkownika" :"Username"}</label>
                 <Field
                     className="form-control"
                     placeholder="Enter Username"
@@ -55,7 +64,7 @@ export default function Login(){
                 
                 
                 
-                <label className="form-label">Password</label>
+                <label className="form-label">{lang ? "hasło" :"password"}</label>
                 <Field
                     className="form-control"
                     placeholder="Enter Password"
@@ -69,7 +78,7 @@ export default function Login(){
                 
                 {props.errors.password && props.touched.password?(<div>{props.errors.password}</div>):null}
                 </div>
-                <Button className="loginBtn" variant="primary" size="lg" type={"submit"}>Login</Button>
+                <Button className="loginBtn" variant="dark" size="lg" type={"submit"}>{lang ? "zaloguj" :"login"}</Button>
                 
             </Form>)}
             </Formik>

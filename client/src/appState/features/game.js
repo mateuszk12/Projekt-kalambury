@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
-
+const code = sessionStorage.getItem("code") !== null ? sessionStorage.getItem("code") : null
 const initialState = {
-    code : "",
-    currUsers:[]
+    code : code,
 }
 
 export const gameSlice = createSlice({
@@ -11,11 +10,13 @@ export const gameSlice = createSlice({
     reducers:{
         addCode: (state, action) => {
             state.code = action.payload
+            state.relode = !state.relode
+            sessionStorage.setItem("code",action.payload)
         },
         removeCode: (state) => {
-            state.code = ""
+            state.code = null
+            sessionStorage.removeItem("code")
         },
-
     }
 })
 

@@ -12,9 +12,7 @@ export default function Choosing()  {
             <Col className="col-md-4">
                 <JoinGame/>
                 <CreateGame/>
-            </Col>
-            
-            
+            </Col> 
         </div>
     )
 }
