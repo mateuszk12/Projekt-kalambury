@@ -23,7 +23,7 @@ export default function JoinGame(){
                 navigate("/kalambury/game")
             })
             .catch((error) => {
-                alert(error.data)
+                alert(error.response.data.message)
             })
         e.preventDefault()
     }   

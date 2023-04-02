@@ -8,6 +8,8 @@ const register = require("./routes/register")
 const login = require("./routes/login")
 const sockets = require("./routes/sockets")
 const game = require("./routes/game")
+const admin = require("./routes/admin")
+const word = require("./routes/words")
 const port = process.env.SERVERPORT
 DbConnection();
 const app = express()
@@ -21,11 +23,12 @@ app.use("/login",login)
 app.use("/sockets",sockets)
 app.use((req,res,next)=>{
     const authHeader = req.headers.authorization;
+    console.log(authHeader)
     if (authHeader) {
         const token = authHeader.split(' ')[1];
         jwt.verify(token,process.env.ACCESS_TOKEN, (err, user) => {
             if (err) {
-                res.sendStatus(403);
+                res.status(403);
             }
             next();
         });
@@ -35,6 +38,8 @@ app.use((req,res,next)=>{
 
 })
 app.use("/game",game)
+app.use("/admin",admin)
+app.use("/word",word)
 mongoose.connection.once('open',() => {
     console.log("connected to databse");
     app.listen(port,()=>{

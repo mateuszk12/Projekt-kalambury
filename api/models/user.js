@@ -21,7 +21,12 @@ const userSchema = new Schema({
         }
     },
     points:{
-        type:Number
+        type:Number,
+        default: 0
+    },
+    gamesN:{
+        type:Number,
+        default:0
     }
 },{timestamps:true});
 

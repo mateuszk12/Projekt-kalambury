@@ -1,8 +1,9 @@
 const express = require("express")
-const {handleGamePut} = require("../controllers/sockets")
+const {handleGamePut,getPoints} = require("../controllers/sockets")
 const router = express.Router()
 
 
-router.route('/')
+router.route('/:id')
     .put(handleGamePut)
+    .get(getPoints)
 module.exports = router;

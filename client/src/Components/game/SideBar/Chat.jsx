@@ -13,6 +13,7 @@ export default function(){
     const username = useSelector((state)=>state.auth.username)
     const [messages,setMessages] = useState([])
     const [message,setMessage] = useState({user:"",message:""})
+    const [drawUs,setDrawUs]  = useState("")
     const socket = useRef(null)
     useEffect(()=>{
         socket.current = (io('http://localhost:3002'))
@@ -20,9 +21,10 @@ export default function(){
         const config = {headers:`Authorization: Bearer ${token}`,params:{gameId:code}}
         axios.get("http://localhost:3001/game/current/chat",config)
             .then((res) => {
-                if (res.data.length > 0){
-                    res.data.forEach((val) => setMessages(prev => [...prev,{user:val.username,message:val.message}]))
+                if (res.data.messages.length > 0){
+                    res.data.messages.forEach((val) => setMessages(prev => [...prev,{user:val.username,message:val.message}]))
                 }
+                setDrawUs(res.data.username)
             })
     },[])
    
@@ -32,8 +34,12 @@ export default function(){
     const handleSubmit  = (e) => {
         if (message.message !== ""){
             e.preventDefault()
-            socket.current.emit("chat",{gameId:code,message:message.message,username:username})
-            setMessages(prev => [...prev,message])
+            console.log(drawUs !== username)
+            if (drawUs !== username){
+                socket.current.emit("chat",{gameId:code,message:message.message,username:username})
+                setMessages(prev => [...prev,message])
+            }
+            
             setMessage({user:"",message:""})
             
         } else {
@@ -46,7 +52,9 @@ export default function(){
             console.log(data)
             setMessages((prev) => [...prev,{user:data.username,message:data.message}])
         })
-        
+        socket.current.on("drawUs",(user)=>{
+            setDrawUs(user.user)
+        })
     },[socket])
     return(
         <div className="Chat">

@@ -25,6 +25,7 @@ const gameSchema = new Schema({
         default:5
     },
     words:[String],
+    guessed:[String],
     messages:[messageSchema],
     status:{
         type:String,

@@ -24,7 +24,7 @@ const handleLogin = async (req,res) => {
         res.status(401).json("invalid password or username")
     }
     } catch(err){
-        res.status(500)
+        res.sendStatus(500)
     }
     
 

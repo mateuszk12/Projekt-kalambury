@@ -15,6 +15,7 @@ export default function Canvas(){
     const [isDrawing,setIsDrawing] = useState(false)
     const socket = useRef(null)
     const location = useLocation()
+    console.log(location.pathname)
     useEffect(()=>{
         canvasRef.current.width = myref.current.getBoundingClientRect().width;
         canvasRef.current.height = myref.current.getBoundingClientRect().height;
@@ -53,7 +54,9 @@ export default function Canvas(){
             const ctx = contextRef.current
             drawimage(canvas,ctx,image)
           })
-        
+        socket.current.on("drawUs",(user)=>{
+            setdrawUs(user.user)
+        })       
     },[socket])
     const handleResize = () => {
             const canvas = canvasRef.current
@@ -71,7 +74,9 @@ export default function Canvas(){
         if(!isDrawing){
             const canvas = canvasRef.current
             const image = canvas.toDataURL("image/png")
-            socket.current.emit("imageGame",{image:image,gameId:code,username:username})
+            if (username === drawUs){
+                socket.current.emit("imageGame",{image:image,gameId:code,username:username})
+            }
         }
     },[isDrawing])
     const drawStart = ({nativeEvent}) => {
@@ -100,8 +105,11 @@ export default function Canvas(){
     }
 
     const drawDot = ({nativeEvent}) => {
-        const {offsetX,offsetY} = nativeEvent
-        contextRef.current.fillRect(offsetX,offsetY,1,1)   
+        if (isDrawing){
+            const {offsetX,offsetY} = nativeEvent
+            contextRef.current.fillRect(offsetX,offsetY,1,1)  
+        }
+        
     }
     return(
         

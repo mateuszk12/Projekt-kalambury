@@ -1,7 +1,7 @@
 const Game = require("../models/game")
+const User = require("../models/user")
 const Word = require("../models/word")
 const nanoid = require("nanoid")
-
 
 
 const handleGamePost = async(req,res) => {
@@ -12,9 +12,13 @@ const handleGameDelete = async(req,res) => {
     
 }
 const handleGameCreate = async(req,res) => {
-    const {users,number} = req.body
+    const {users,number,username,category} = req.body
+    console.log(users,number,username,category)
     const code = nanoid(8) 
-    const words = await Word.find().distinct("words")
+    const cat = (category === undefined ? "default" : category)
+    console.log(cat)
+    const result = await Word.findOne({category:cat})
+    const words = result.words
     const bannedUsers = []
     try{
         if (users) {
@@ -27,6 +31,8 @@ const handleGameCreate = async(req,res) => {
             "max":number,
             "bannedUsers":bannedUsers,
             "words":words.slice(0,number),
+            "users":[username],
+            "currentUser":username
             })
         res.status(201).send(code)
     } catch {
@@ -44,18 +50,21 @@ const getGameInfo = async (req,res) => {
 const joinGame = async (req,res) => {
     const {gameId,username} = req.query
     if(gameId && username){
+        console.log(gameId,username)
         const result = await Game.findOne({gameId:gameId})
-        // const isBanned = result.bannedUsers.includes(username)
-        // console.log(isBanned)
+        const isBanned = result.bannedUsers.includes(username)
         // const numberOfp = result.currentState.curentUsers
-        if (result){
+        if (result && !isBanned){
+            await Game.updateOne({gameId:gameId},{
+                $push:{users:username}
+            })
             res.sendStatus(200)
         } else {
-            res.sendStatus(404)
+            res.status(401).json({message:"you can't join the game ;("})
         }
         
     } else {
-        res.sendStatus(403)
+        res.status(403)
     }
 }
 const handleGameGet = async(req,res) => {
@@ -68,10 +77,10 @@ const handleGameGet = async(req,res) => {
             const filteredMessages = result.messages.filter(val => JSON.stringify(val) !== '{}')
             const img = result.latestImage
             if (id === "chat"){
-                res.status(200).send(filteredMessages)
+                res.status(200).send({messages:filteredMessages,username:result.currentUser})
             } 
             if (id === "image"){
-                res.status(200).send({image:img,username:"testKonto"})
+                res.status(200).send({image:img,username:result.currentUser})
             }
         } else {
             res.sendStatus(400)
@@ -80,4 +89,35 @@ const handleGameGet = async(req,res) => {
         res.status(500)
     }
 }
-module.exports = {handleGamePost,handleGameDelete,handleGameCreate,getGameInfo,joinGame,handleGameGet}
+const handleGameStats = async(req,res)=>{
+    const {username} = req.query
+    try{
+        data = {}
+        const result = await User.findOne({username:username})
+        data.points = result.points
+        const games = await Game.aggregate([
+            {
+              $match: {
+                users: { $elemMatch: { $eq: "testKonto2" } }
+              }
+            },
+            {
+              $count: "count"
+            }
+          ]);
+          data.games = games[0]
+          res.status(200).send(data)
+    } catch {
+        res.sendStatus(500)
+    }
+}
+const getWord = async (req,res) => {
+    const {username,gameId} = req.query
+    const result = Game.findOne({gameId:gameId})
+    if (result.currentUser === username){
+        res.status(200).send(result.words[0])
+    } else {
+        res.sendStatus(403)
+    }
+}
+module.exports = {handleGamePost,handleGameDelete,handleGameCreate,getGameInfo,joinGame,handleGameGet,handleGameStats,getWord}

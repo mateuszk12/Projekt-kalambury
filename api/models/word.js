@@ -4,6 +4,9 @@ const Schema = mongoose.Schema
 const wordSchema = new Schema({
     words:{
         type:[String],
+    },
+    category:{
+        type:String
     }
 })
 

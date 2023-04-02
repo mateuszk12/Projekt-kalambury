@@ -11,6 +11,7 @@ export default function CreateGame(){
     const navigate = useNavigate()
     const token = useSelector((state)=>state.auth.token)
     const lang = useSelector((state) => state.customize.lang)
+    const username = useSelector((state) => state.auth.username)
     const dispatch = useDispatch()
     const [users,setUsers] = useState("")
     const [max,setMax] = useState(0)
@@ -22,7 +23,7 @@ export default function CreateGame(){
     }
     const onSubmit = (e) => {
         const config = {headers: { 'Authorization': `Bearer ${token}`,'Content-Type':'application/json' }};
-        const data = {}
+        const data = {username:username}
         if (max > 0 || users !== "" ){
             if (max > 0){
                 data.number = max
